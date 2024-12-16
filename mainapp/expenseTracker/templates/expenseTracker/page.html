@@ -4,144 +4,274 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Expense Tracker</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --background-color: #ecf0f1;
+            --text-color: #2c3e50;
+            --white: #ffffff;
+            --danger-color: #e74c3c;
+            --success-color: #2ecc71;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
-            font-family: 'Arial', sans-serif;
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
-            background-color: #f4f4f4;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
             line-height: 1.6;
         }
-        h1 {
-            text-align: center;
-            color: #333;
-            border-bottom: 2px solid #5D6D7E;
-            padding-bottom: 10px;
-        }
-        table {
+
+        .container {
             width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 20px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-            background-color: white;
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 20px;
         }
-        th, td {
-            text-align: left;
-            padding: 12px;
-            border-bottom: 1px solid #ddd;
-        }
-        th {
-            background-color: #5D6D7E;
-            color: white;
-        }
-        tr:nth-child(even) {
-            background-color: #f2f2f2;
-        }
-        tr:hover {
-            background-color: #ddd;
-        }
-        .total {
-            font-weight: bold;
-            text-align: right;
-            padding: 10px;
-            background-color: #f8f8f8;
-        }
-        .action-links {
+
+        .header {
             display: flex;
             justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            background-color: var(--white);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .header h1 {
+            display: flex;
+            align-items: center;
+            font-size: 1.8em;
+            color: var(--primary-color);
+        }
+
+        .header h1 i {
+            margin-right: 15px;
+            color: var(--secondary-color);
+        }
+
+        .add-expense-btn {
+            display: flex;
+            align-items: center;
+            background-color: var(--success-color);
+            color: var(--white);
+            padding: 10px 20px;
+            border-radius: 6px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .add-expense-btn:hover {
+            background-color: #27ae60;
+            transform: translateY(-2px);
+        }
+
+        .add-expense-btn i {
+            margin-right: 10px;
+        }
+
+        .expense-table {
+            width: 100%;
+            background-color: var(--white);
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .expense-table table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .expense-table th {
+            background-color: var(--primary-color);
+            color: var(--white);
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        .expense-table td {
+            padding: 15px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .expense-table tr:nth-child(even) {
+            background-color: #f7f9fa;
+        }
+
+        .expense-table tr:hover {
+            background-color: #f1f3f4;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .delete-link, .update-link {
+            text-decoration: none;
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-size: 0.9em;
+            display: flex;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        .delete-link {
+            background-color: var(--danger-color);
+            color: var(--white);
+        }
+
+        .update-link {
+            background-color: var(--secondary-color);
+            color: var(--white);
+        }
+
+        .delete-link:hover {
+            background-color: #c0392b;
+        }
+
+        .update-link:hover {
+            background-color: #2980b9;
+        }
+
+        .total-summary {
+            display: flex;
+            justify-content: flex-end;
             margin-top: 20px;
         }
-        .action-links a {
-            text-decoration: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            transition: background-color 0.3s ease;
+
+        .total-card {
+            background-color: var(--white);
+            padding: 15px 25px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            font-weight: bold;
+            color: var(--primary-color);
         }
-        .add-expense {
-            background-color: #4CAF50;
-            color: white;
-        }
-        .add-expense:hover {
-            background-color: #45a049;
-        }
-        .delete-link, .update-link {
-            background-color: #f44336;
-            color: white;
-            margin: 5px;
-            display: inline-block;
-            border-radius: 3px;
-        }
-        .delete-link:hover, .update-link:hover {
-            background-color: #d32f2f;
-        }
+
         .empty-state {
             text-align: center;
-            color: #777;
-            padding: 20px;
-            background-color: white;
-            border-radius: 5px;
+            background-color: var(--white);
+            padding: 50px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .empty-state p {
+            margin-bottom: 20px;
+            color: #7f8c8d;
+            font-size: 1.2em;
+        }
+
+        .empty-state a {
+            display: inline-block;
+            background-color: var(--secondary-color);
+            color: var(--white);
+            padding: 12px 24px;
+            text-decoration: none;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+
+        .empty-state a:hover {
+            background-color: #2980b9;
+            transform: translateY(-2px);
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .add-expense-btn {
+                margin-top: 15px;
+            }
+
+            .expense-table td, .expense-table th {
+                padding: 10px;
+            }
         }
     </style>
 </head>
 <body>
-    <h1>EXPENSE LIST</h1>
+    <div class="container">
+        <div class="header">
+            <h1>
+                <i class="fas fa-chart-line"></i>
+                Expense Tracker
+            </h1>
+            <a href="{% url 'add_expense' %}" class="add-expense-btn">
+                <i class="fas fa-plus"></i>
+                Add New Expense
+            </a>
+        </div>
 
-    {% if expense %}
-    <table>
-        <thead>
-            <tr>
-                <th>Title</th>
-                <th>Price</th>
-                <th>Category</th>
-                <th>Note</th>
-                <th>Date</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for expense in expense %}
-            <tr>
-                <td>{{expense.title}}</td>
-                <td>{{expense.price}}</td>
-                <td>{{expense.category}}</td>
-                <td>{{expense.note}}</td>
-                <td>{{expense.date}}</td>
-                <td>
-                    <a href="{% url 'delete_expense' expense.id %}" 
-                       class="delete-link"
-                       onclick="return confirm('Are you sure you want to delete this expense?');">
-                        Delete
-                    </a>
-                    <a href="{% url 'update_expense' expense.id %}" 
-                       class="update-link"
-                       onclick="return confirm('Are you sure you want to Update this expense?');">
-                        Update
-                    </a>
-                </td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+        {% if expense %}
+        <div class="expense-table">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Price</th>
+                        <th>Category</th>
+                        <th>Note</th>
+                        <th>Date</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for expense in expense %}
+                    <tr>
+                        <td>{{expense.title}}</td>
+                        <td>{{expense.price}}</td>
+                        <td>{{expense.category}}</td>
+                        <td>{{expense.note}}</td>
+                        <td>{{expense.date}}</td>
+                        <td class="action-buttons">
+                            <a href="{% url 'update_expense' expense.id %}" 
+                               class="update-link"
+                               onclick="return confirm('Are you sure you want to Update this expense?');">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                            <a href="{% url 'delete_expense' expense.id %}" 
+                               class="delete-link"
+                               onclick="return confirm('Are you sure you want to delete this expense?');">
+                                <i class="fas fa-trash"></i>
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
 
-    <div class="total">
-        Total Expenses: {{total}}
-    </div>
-    
-    <div class="action-links">
-        <a href="{% url 'add_expense' %}" class="add-expense" target="_blank">
-            Add New Expense
-        </a>
-    </div>
+        <div class="total-summary">
+            <div class="total-card">
+                Total Expenses: {{total}}
+            </div>
+        </div>
 
-    {% else %}
-    <div class="empty-state">
-        <p>No expenses recorded yet</p>
-        <a href="{% url 'add_expense' %}" class="add-expense" target="_blank">
-            <b>Add Your First Expense</b>
-        </a>
+        {% else %}
+        <div class="empty-state">
+            <p>No expenses recorded yet</p>
+            <a href="{% url 'add_expense' %}">
+                <b>Add Your First Expense</b>
+            </a>
+        </div>
+        {% endif %}
     </div>
-    {% endif %}
-UPLOAD A BILL:<a href="{% url 'upload_bill' %}">Upload a Bill</a>
 </body>
 </html>
