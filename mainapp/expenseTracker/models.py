@@ -1,5 +1,5 @@
 from django.db import models
-
+from django.conf import settings
 
 CHOICES=(
         ('Food', 'Food'),
@@ -17,6 +17,7 @@ class Expense(models.Model):
     category=models.CharField(max_length=50,choices=CHOICES,default="Other")
     date=models.DateTimeField(auto_now_add=True,blank=False)
     note=models.TextField(max_length=50,blank=True,default="An Expense")
+
 
     class Meta:
         ordering = ('title','category','note','price','date')

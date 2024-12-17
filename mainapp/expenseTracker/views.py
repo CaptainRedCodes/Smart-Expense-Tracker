@@ -21,6 +21,7 @@ def expense_list(request):
     return render(request, 'expenseTracker/page.html', {'expense': expense,
                                                         'total': total_amount})
 
+
 def add_expense(request):
     ocr_data = None
     form=None
@@ -108,7 +109,7 @@ def extract_total_from_bill(results):
     total_keywords = [
         'total', 'grand total', 'amount due', 'balance',
         'total amount', 'net total', 'payable', 'to pay',
-        'sub total', 'total due', 'sub totel', 'amount'
+        'sub total', 'total due', 'sub totel', 'amount','₹','price'
     ]    
     lines = results.splitlines()
     for line in lines:
