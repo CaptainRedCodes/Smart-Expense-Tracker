@@ -11,17 +11,22 @@ from django.core.files.storage import FileSystemStorage
 import cv2
 import numpy as np
 import spacy
+from django.contrib.auth.decorators import login_required
 
 pytesseract.pytesseract.tesseract_cmd = r"C:\Users\svmra\OneDrive\Documents\Programming\tessaract\tesseract.exe"
 
-# Create your views here.
+
+def home(request):
+    return render(request, 'expenseTracker/homepage.html')
+
+@login_required
 def expense_list(request):
-    expense = Expense.objects.all()
+    expense = request.user.expenses.all()
     total_amount = sum(expense.price for expense in expense)
     return render(request, 'expenseTracker/page.html', {'expense': expense,
                                                         'total': total_amount})
 
-
+@login_required
 def add_expense(request):
     ocr_data = None
     form=None
@@ -57,18 +62,22 @@ def add_expense(request):
         else:
             form = ExpenseForm(request.POST)
             if form.is_valid():
-                form.save()
+                expense = form.save(commit=False)
+                expense.user = request.user  # Associate expense with current user
+                expense.save()
                 return redirect('expense_list')
     else:
         form = ExpenseForm(initial=ocr_data)
 
     return render(request, 'expenseTracker/add.html', {'form': form})
 
+@login_required
 def delete_expense(request, expense_id):
     expense = get_object_or_404(Expense, id=expense_id)
     expense.delete()
     return redirect('expense_list')
 
+@login_required
 def update_expense(request, expense_id):
     expense = get_object_or_404(Expense, id=expense_id)
     if request.method == 'POST':
@@ -80,7 +89,7 @@ def update_expense(request, expense_id):
         form = ExpenseForm()
     return render(request, 'expenseTracker/add.html', {'form': form})
 
-
+@login_required
 def preprocess_image(image_path):
     image = cv2.imread(image_path)
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
@@ -101,6 +110,7 @@ def preprocess_image(image_path):
     
     return rotated
 
+@login_required
 def extract_total_from_bill(results):
     price_patterns = [
         re.compile(r'\b\₹?\s*\d{1,3}(?:,\d{3})*\.\d{2}\b'), 
@@ -123,6 +133,7 @@ def extract_total_from_bill(results):
     
     return None
 
+@login_required
 def extract_name(result):
 
     nlp = spacy.load("en_core_web_sm")

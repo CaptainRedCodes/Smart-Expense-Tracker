@@ -6,11 +6,9 @@
     <title>Document</title>
 </head>
 <body>
-    <h2>Logged out</h2>
-    <form method="post" action="{% url 'logout' %}">
-        {% csrf_token %}
-        <h2>Logged out</h2>
-        <button type="submit">logout</button>
-    </form>
+    <h1>Welcome, {{ user.username }}</h1>
+<p>Your additional data: {{ profile.additional_data }}</p>
+<p>Your preferences: {{ profile.preferences }}</p>
+
 </body>
 </html>
