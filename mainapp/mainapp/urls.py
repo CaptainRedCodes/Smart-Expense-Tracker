@@ -20,7 +20,5 @@ from expenseTracker import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('tracker/',include('expenseTracker.urls')),
-    path('auth/',include('allauth.urls')),
-    path('accounts/',include('accounts.urls')),
-    path('',views.home,name='home_page')
+    path('accounts/',include('allauth.urls')),
 ]

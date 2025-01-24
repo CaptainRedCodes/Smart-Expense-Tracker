@@ -28,7 +28,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-
+SITE_ID = 1
 # Application definition
 
 INSTALLED_APPS = [
@@ -40,13 +40,14 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.sites',
-    'accounts.apps.AccountsConfig',
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
+    "crispy_forms",
+    "crispy_bootstrap5",
 ]
 
-SITE_ID = 1
+
 
 
 MIDDLEWARE = [
@@ -65,7 +66,7 @@ ROOT_URLCONF = 'mainapp.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [(os.path.join(BASE_DIR,'templates'))],
+        'DIRS': [BASE_DIR/'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -146,7 +147,14 @@ AUTHENTICATION_BACKENDS = [
 	  'allauth.account.auth_backends.AuthenticationBackend',
     ]
 
-LOGIN_URL = '/auth/login/' 
-LOGIN_REDIRECT_URL = '/tracker/page/'  
-LOGOUT_REDIRECT_URL = '/auth/login/'  
+
+
+LOGIN_REDIRECT_URL = 'expense_list'
+
+
+
+GROQ_API_KEY = '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'  
+
+CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
+CRISPY_TEMPLATE_PACK = "bootstrap5"
 
