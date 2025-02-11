@@ -32,6 +32,7 @@ SITE_ID = 1
 # Application definition
 
 INSTALLED_APPS = [
+    'rest_framework',
     'expenseTracker',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -40,11 +41,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.sites',
-    'allauth',
-    'allauth.account',
-    'allauth.socialaccount',
-    "crispy_forms",
-    "crispy_bootstrap5",
 ]
 
 
@@ -58,7 +54,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'allauth.account.middleware.AccountMiddleware',
 ]
 
 ROOT_URLCONF = 'mainapp.urls'
@@ -90,7 +85,7 @@ DATABASES = {
 		'ENGINE': 'django.db.backends.mysql',
 		'NAME': 'ExpenseTracker',
 		'USER': 'root',
-		'PASSWORD': 'Kayambody@15',
+		'PASSWORD':'Kayambody@15',
 		'HOST':'localhost',
 		'PORT':'3306',
 	}
@@ -142,19 +137,29 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 MEDIA_ROOT =  os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 
-AUTHENTICATION_BACKENDS = [
-    'django.contrib.auth.backends.ModelBackend',
-	  'allauth.account.auth_backends.AuthenticationBackend',
-    ]
 
 
 
-LOGIN_REDIRECT_URL = 'expense_list'
+
+LOGIN_REDIRECT_URL = 'expense-list-create'
+
+
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
+# Access the variable
+GROQ_API_KEY = os.getenv("GROQ_API_KEY")
 
 
 
-GROQ_API_KEY = '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'  
 
-CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
-CRISPY_TEMPLATE_PACK = "bootstrap5"
 
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',
+    ],
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.SessionAuthentication',
+    ],
+}

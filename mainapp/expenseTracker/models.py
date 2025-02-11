@@ -28,3 +28,4 @@ class Expense(models.Model):
 
     class Meta:
         ordering = ['-date']
+
